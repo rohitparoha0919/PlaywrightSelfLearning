@@ -10,6 +10,7 @@ await Login.ValidLogin()
 console.log('valid Login Test Passed')
     const Contactus = new contactUsForm(page)
 await Contactus.ContactUsClick()
+await page.waitForTimeout(5000)
 
 
 
