@@ -17,7 +17,7 @@ export class contactUsForm {
         await this.ContactUsButton.click()
         expect (this.page).toHaveURL('https://www.automationexercise.com/contact_us')
         await this.FeebackNavigationLink.click()
-        //dummy comment for runing pipeline
+        //dummy comment for runing pipeline.
 
 
     }
