@@ -1,14 +1,11 @@
-import {test, expect} from  '@playwright/test'
+import {expect} from  '@playwright/test'
 import { contactUsForm } from '../pages/Page.ContactUs.AE'
-import { Loginform } from '../pages/Page.Login.AE'
+import {test} from './Fixtures/test-AEFixtures'
 
-test('click on contact us button ', async({page})=>{
+test('click on contact us button ', async({ValidLogin, page})=>{
 
-    const Login = new Loginform(page)
-await page.goto('https://www.automationexercise.com/login')      
-await Login.ValidLogin()
-console.log('valid Login Test Passed')
-    const Contactus = new contactUsForm(page)
+    
+const Contactus = new contactUsForm(page)
 await Contactus.ContactUsClick()
 await page.waitForTimeout(5000)
 

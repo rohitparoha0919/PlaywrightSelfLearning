@@ -1,17 +1,8 @@
-import {test, expect} from '@playwright/test'
-
+import {expect} from '@playwright/test'
+import {test} from './Fixtures/test-AEFixtures'
 import { AddToCartForm } from '../pages/Page.AddToCart.AE'
-import { Loginform } from '../pages/Page.Login.AE'
 
-test('Login & Add to Cart', async({page})=>{
-
-
-
-await page.goto('https://www.automationexercise.com/login')  
-
-const Login = new Loginform(page)    
-await Login.ValidLogin()
-console.log('valid Login Test Passed')
+test('Login & Add to Cart', async({ValidLogin, page})=>{
 const AddtoCart = new AddToCartForm(page)
 await AddtoCart.AddItemsToCardAndCheckout()
 

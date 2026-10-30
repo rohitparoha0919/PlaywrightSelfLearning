@@ -1,4 +1,4 @@
-import {test, expect} from '@playwright/test'
+import { expect } from '@playwright/test'
 export class Signupform {
 
     constructor(page) {
@@ -6,13 +6,13 @@ export class Signupform {
 
         //PreSigup Form locators
         this.page = page;
-        this.emailCounter = Math.floor(Math.random() *9000) +1000;;
-        
+        this.emailCounter = Math.floor(Math.random() * 9000) + 1000;
+
         this.EnterNameForSignup = page.locator('//input[@data-qa="signup-name"]')
         this.EnterEmailForSignup = page.locator('//input[@data-qa="signup-email"]')
         this.SignupButton = page.locator('//button[@data-qa="signup-button"]')
         this.emailAlreadyExistMessage = page.locator('//p[@style="color: red;"]')
-        
+
         //Signup Form Locators
         this.Title = page.locator('#id_gender1')
         this.Password = page.locator('#password')
@@ -31,32 +31,32 @@ export class Signupform {
         this.EnterZipcode = page.locator('#zipcode')
         this.EnterMobileNumber = page.locator('#mobile_number')
         this.CreateAccountButton = page.locator('//button[@data-qa="create-account"]')
-        
+
 
     }
     async PreSignupFormFill() {
-
-        
-
-        const email = `Test${this.emailCounter}@gmail.com`;
-
+        this.email = `Test${this.emailCounter}@gmail.com`;
         await this.EnterNameForSignup.fill('Test')
-        await this.EnterEmailForSignup.fill(email)
+        await this.EnterEmailForSignup.fill(this.email)
         await this.SignupButton.click()
-        await this.page.waitForTimeout(3000)
-         expect (this.page).toHaveURL('https://www.automationexercise.com/signup')
     }
 
-    async ifemailAlreadyExist(){
+    async ifemailAlreadyExist() {
 
-        if(await this.emailAlreadyExistMessage.isVisible()){
+        const result = await Promise.race([
+            this.page.waitForURL('https://www.automationexercise.com/signup').then(() => 'signup'),
+            
+            this.emailAlreadyExistMessage.waitFor({ state: 'visible' }).then(() => 'email-exists')
+        ]);
 
+        if (result === 'email-exists') {
             this.emailCounter++;
 
-            console.log(`Email already exists. Trying with a new email: ${email}`);
+            console.log(`Email already exists. Trying with a new email.`);
             await this.PreSignupFormFill(); // Retry with a new email
+            await this.ifemailAlreadyExist();
         }
-        
+
 
     }
 
@@ -78,8 +78,7 @@ export class Signupform {
         await this.EnterZipcode.fill('90210')
         await this.EnterMobileNumber.fill('9691678904')
         await this.CreateAccountButton.click()
-        await this.page.waitForTimeout(3000)
-        await expect (this.page).toHaveURL('https://www.automationexercise.com/account_created')
+        await expect(this.page).toHaveURL('https://www.automationexercise.com/account_created')
     }
 
 
